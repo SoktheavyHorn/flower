@@ -86,7 +86,7 @@ def main():
         page_title="Flower Classification", page_icon="🌸", layout="centered"
     )
 
-    st.title("🌸 Flower Classification App 88")
+    st.title("🌸 Flower Classification App")
     st.write(
         "Upload an image to identify if it's a **Tulip**, **Rose**, or **Sunflower**"
     )
