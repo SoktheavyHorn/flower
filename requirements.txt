@@ -2,4 +2,3 @@ streamlit
 tf-keras
 pillow
 numpy
-opencv-python
