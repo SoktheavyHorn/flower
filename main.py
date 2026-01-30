@@ -88,7 +88,7 @@ def main():
 
     st.title("🌸 Flower Classification App")
     st.write(
-        "Upload an image to identify if it's a **Tulip**, **Rose**, or **Sunflower**"
+        "Upload an image or use your webcam to identify if it's a **Tulip**, **Rose**, or **Sunflower**"
     )
 
     # Load model and labels
@@ -99,35 +99,51 @@ def main():
         st.error(f"Error loading model or labels: {e}")
         return
 
-    # File uploader - only accepts single image
-    uploaded_file = st.file_uploader(
-        "Choose an image...", type=["jpg", "jpeg", "png"], accept_multiple_files=False
+    # 🔹 Select input method
+    input_method = st.radio(
+        "Select image input method:",
+        ("Upload Image", "Use Webcam"),
+        horizontal=True,
     )
 
-    if uploaded_file is not None:
-        # Display the uploaded image
-        image = Image.open(uploaded_file)
+    image = None
 
+    # 🔹 Option 1: Upload image
+    if input_method == "Upload Image":
+        uploaded_file = st.file_uploader(
+            "Choose an image...",
+            type=["jpg", "jpeg", "png"],
+            accept_multiple_files=False,
+        )
+        if uploaded_file is not None:
+            image = Image.open(uploaded_file)
+
+    # 🔹 Option 2: Webcam
+    elif input_method == "Use Webcam":
+        camera_image = st.camera_input("Take a picture")
+        if camera_image is not None:
+            image = Image.open(camera_image)
+
+    # 🔹 If an image is available, run prediction
+    if image is not None:
         col1, col2 = st.columns(2)
 
         with col1:
-            st.image(image, caption="Uploaded Image", use_container_width=True)
+            st.image(image, caption="Input Image", use_container_width=True)
 
         with col2:
-            # Make prediction
             with st.spinner("Analyzing..."):
                 predicted_label, confidence, all_results = predict_flower(
                     model, image, labels
                 )
 
-            # Display results
             st.success(f"**Prediction: {predicted_label}**")
             st.metric("Confidence", f"{confidence * 100:.2f}%")
 
-            # Show all predictions
             st.write("**All Predictions:**")
             for label, prob in all_results:
                 st.progress(float(prob), text=f"{label}: {prob * 100:.2f}%")
+
 
 
 if __name__ == "__main__":
