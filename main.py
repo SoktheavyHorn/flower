@@ -90,7 +90,7 @@ def main():
 
     st.title("🌸 Flower Classification App")
     st.write(
-        "Upload an image or use webcam to identify if it's a Tulip, Rose, or **Sunflower**"
+        "Upload an image or use webcam to identify if it's a **Tulip**, **Rose**, or **Sunflower**"
     )
 
     # Load model and labels
@@ -140,6 +140,7 @@ def main():
 
                 while st.session_state.webcam_running:
                     ret, frame = cap.read()
+
                     if not ret:
                         st.error("Failed to capture frame from webcam")
                         break
@@ -231,5 +232,5 @@ def main():
                     st.progress(float(prob), text=f"{label}: {prob * 100:.2f}%")
 
 
-if name == "__main__":
+if __name__ == "__main__":
     main()
